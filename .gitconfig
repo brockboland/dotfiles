@@ -1,0 +1,108 @@
+[user]
+	name = Brock Boland
+	email = brock@brockboland.com
+[color]
+	status = auto
+	interactive = auto
+	diff = auto
+	branch = auto
+	pager = true
+[core]
+	editor = subl -w
+	autocrlf = false
+	safecrlf = false
+	excludesfile = ~/.gitignore_global
+	ignorecase = false
+[alias]
+  # Type less
+	br = branch
+	ci = commit
+	co = checkout
+	st = status
+	cp = cherry-pick
+
+  unstage = reset -q HEAD --
+  discard = checkout --
+  uncommit = reset --mixed HEAD~
+  amend = commit --amend
+
+  # View diff by word, instead of by line
+  dw = diff --word-diff=color
+  # View info about the origin remote
+	info = remote show origin
+  # One-line log
+	oneline = log --pretty=oneline
+  # Undo local changes
+  coo = checkout --
+
+  # View a branch map thing
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+
+  # Cleanup the remote branch list, to remove those that have already been removed on the remote repo
+  cleanup = !git remote prune origin && git gc
+
+  # View commits from the past day
+  today = !sh -c \"git log --all --author=\\\"`git config --get user.name`\\\" --after=yesterday --pretty=format:'%h - %ad: %s'\"
+
+  # View commits from the past week
+  week = !sh -c \"git log --all --author=\\\"`git config --get user.name`\\\" --after=\\\"7 days ago\\\" --pretty=format:'%h - %ad: %s'\"
+
+  # View commits from yesterday (24-48 hours ago)
+  yesterday = !sh -c \"git log --all --author=\\\"`git config --get user.name`\\\" --after=\\\"two days ago\\\" --before=yesterday --pretty=format:'%h - %ad: %s'\"
+
+  # View commit count per team member
+  team = !sh -c \"git log --all --format=%an . | sort | uniq -c | sort -nr\"
+
+  # Pop the last commit
+  popcommit = reset --soft HEAD~1
+
+  # Update submodules (both aliases are the same)
+  upsub = submodule update --init --recursive
+  subup = submodule update --init --recursive
+
+  # Pull upstream changes and rebase on top of the master
+  rebaseupstream = !git fetch upstream && git rebase upstream/master
+  rebasevokal = !git fetch vokal && git rebase vokal/master
+
+[diff]
+  renames = copies
+
+[color "branch"]
+  current = green reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
+# Allow easy Drupal cloning
+[url "brockboland@git.drupal.org:project/"]
+  insteadOf = mod:
+[branch]
+	autosetuprebase = always
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[push]
+	default = simple
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[credential]
+	helper = osxkeychain
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
