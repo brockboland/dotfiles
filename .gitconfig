@@ -60,9 +60,8 @@
   upsub = submodule update --init --recursive
   subup = submodule update --init --recursive
 
-  # Pull upstream changes and rebase on top of the master
-  rebaseupstream = !git fetch upstream && git rebase upstream/master
-  rebasevokal = !git fetch vokal && git rebase vokal/master
+  # List remote branches that have already been merged into the develop branch
+  merged-branches = for-each-ref --merged develop --format='%(refname) %09 %(authorname)' refs/remotes/
 
 [diff]
   renames = copies
