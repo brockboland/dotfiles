@@ -1,10 +1,9 @@
+echo "Starting bash profile"
 export PATH=~/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/opt/llvm/bin:$PATH
-
 
 export SVN_EDITOR='subl -w'
 export GIT_EDITOR='subl -w'
 export LESSEDIT='subl -l %lm %f'
-export GOPATH=~/go_workspace
 
 alias ll="ls -lh"
 alias la="ls -lah"
@@ -12,90 +11,18 @@ alias flush="dscacheutil -flushcache"
 alias topmem="top -n 20 -o vsize"
 alias topcpu="top -n 20 -o cpu"
 
-alias mysql=/Applications/MAMP/Library/bin/mysql
-alias mysqldump=/Applications/MAMP/Library/bin/mysqldump
-
 # Open current path in Finder
 alias f='open -a Finder ./'
 
-# Load RVM function
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-
-
-# Use hub for git operations
-# alias git=hub
-
 # Use git auto-completion
-# TODO: do this without hard-coding versions
-source /usr/local/Cellar/git/2.9.0/etc/bash_completion.d/git-completion.bash
-source /usr/local/Cellar/git/2.9.0/etc/bash_completion.d/git-prompt.sh
-source /usr/local/Cellar/hub/2.2.9/etc/bash_completion.d/hub.bash_completion.sh
+# TODO: do this without hard-coding the version number
+source /usr/local/Cellar/git/2.31.1/etc/bash_completion.d/git-completion.bash
+source /usr/local/Cellar/git/2.31.1/etc/bash_completion.d/git-prompt.sh
 
-function spidersite {
-  if [ -z "$1" ]
-  then
-    # No parameter passed, show usage
-    echo "Usage: spidersite [http://example.com]"
-  else
-    # Spider the site
-    wget -q --mirror -p --html-extension -e robots=off --base=./ -k -P ./ $1
-  fi
-}
-
-function cleanWhiteboard {
-  convert "$1" -morphology Convolve DoG:15,100,0 -negate -normalize -blur 0x1 -channel RBG -level 60%,91%,0.1 "$2"
-}
-
-# Convert a movie file to a gif. Crappy quality, only good for short screen cap
-# See https://gist.github.com/dergachev/4627207
-function gifify {
-  if [ -z "$1" ]
-  then
-    # No parameter passed, show usage
-    echo "Usage: gifify filename.mov"
-    echo "Resulting gif is stored as out.gif"
-  else
-    ffmpeg -i "$1" -s 320x480 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > out.gif
-  fi
-}
-
-
-# Convert a movie file to a gif. Better quality!
-# The output file is the original file with .gif tacked on
-# See http://superuser.com/a/556031/1090
-function goodgif {
-  if [ -z "$1" ]
-  then
-    # No parameter passed, show usage
-    echo "Usage: goodgif filename.mov"
-    echo "Resulting gif is stored as out.gif"
-  else
-    mkdir framestmp
-    ffmpeg -i "$1" -vf scale=320:-1 -r 10 framestmp/ffout%03d.png
-    convert -delay 10 -loop 0 framestmp/ffout*.png out.gif
-    mv out.gif "$1.gif"
-    rm -rf framestmp
-  fi
-}
-
-
-# Syntax highlighting
-function syntax_highlight {
-  qlmanage -p $1  -o .
-}
-
-# cd to the path of the front Finder window
-function cdf() {
-	target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
-	if [ "$target" != "" ]; then
-		cd "$target"; pwd
-	else
-		echo 'No Finder window found' >&2
-	fi
-}
-
-
-
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 #################################################
 # Prompt cusomtization from:
@@ -180,3 +107,5 @@ TICK="✓"
 CROSS="✗"
 
 PS1="\[\e]0;\u@\h: \w\a\]"'$(BRANCH=`git rev-parse --abbrev-ref HEAD 2> /dev/null`; if [ -n "$BRANCH" ]; then DIRTY=`git status --porcelain --untracked-files=no 2> /dev/null`; if [ -n "$DIRTY" ]; then echo "'$BRed'$CROSS "; else echo "'$BGreen'$TICK "; fi; fi;)'"$Color_Off${debian_chroot:+($debian_chroot)}\w$BYellow\$(__git_ps1)\$ $Color_Off"
+
+echo "Ending bash profile"
