@@ -8,7 +8,7 @@
 	branch = auto
 	pager = true
 [core]
-	editor = subl -w
+	editor = code --wait
 	autocrlf = false
 	safecrlf = false
 	excludesfile = ~/.gitignore_global

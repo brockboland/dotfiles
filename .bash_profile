@@ -1,4 +1,7 @@
-echo "Starting bash profile"
+# DEPRECATED
+# I switched to zsh so this is no longer used
+
+
 export PATH=~/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/opt/llvm/bin:$PATH
 
 export SVN_EDITOR='subl -w'
@@ -107,5 +110,3 @@ TICK="✓"
 CROSS="✗"
 
 PS1="\[\e]0;\u@\h: \w\a\]"'$(BRANCH=`git rev-parse --abbrev-ref HEAD 2> /dev/null`; if [ -n "$BRANCH" ]; then DIRTY=`git status --porcelain --untracked-files=no 2> /dev/null`; if [ -n "$DIRTY" ]; then echo "'$BRed'$CROSS "; else echo "'$BGreen'$TICK "; fi; fi;)'"$Color_Off${debian_chroot:+($debian_chroot)}\w$BYellow\$(__git_ps1)\$ $Color_Off"
-
-echo "Ending bash profile"
